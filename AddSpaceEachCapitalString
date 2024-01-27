@@ -1,0 +1,6 @@
+let
+    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WSirNzEnJzEt3T00pzUtXitWJVkrMLsksS3QsLk4tCUgtKi1OzEhMzAPLYFFclpqRmZyT6p2al5JYBFOXkp9dmpuaF5CaVwJUjWxILAA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [RAW = _t]),
+    Custom1 = Table.TransformColumns(Source, {"RAW", Splitter.SplitTextByCharacterTransition({"a".."z"}, {"A".."Z"})}),
+    #"Extracted Values" = Table.TransformColumns(Custom1, {"RAW", each Text.Proper(Text.Combine(List.Transform(_, Text.From), " ")), type text})
+in
+    #"Extracted Values"
